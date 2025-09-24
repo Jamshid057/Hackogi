@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
 from common.models import BaseModel
 
 
@@ -60,3 +59,22 @@ class IdeaUpvote(BaseModel):
 
     def __str__(self):
         return f"{self.user} likes {self.idea.title}"
+
+
+class EventRequest(BaseModel):  # BaseModel dan foydalanishing ham mumkin
+    user = models.ForeignKey(
+        "accounts.CustomUser",
+        on_delete=models.CASCADE,
+        related_name="event_requests",
+        related_query_name="event_request",
+    )
+    title = models.CharField(_("title"), max_length=200)
+    overview = models.TextField(_("overview"))
+    start_date = models.DateTimeField(_("start date"))
+    end_date = models.DateTimeField(_("end date"))
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.title} (by {self.user.first_name} {self.user.last_name})"
+

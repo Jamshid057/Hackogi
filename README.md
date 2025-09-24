@@ -1,3 +1,3 @@
 Hackathon Managment Platform
 
-By https://t.me/Jamshid_057
+By https://t.me/Neo_0057

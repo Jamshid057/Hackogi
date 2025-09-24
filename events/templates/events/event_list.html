@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+
+    <!-- Approved Events Section -->
+    <h2 class="mb-4 text-center">📅 Approved Events</h2>
+    <div class="row">
+        {% for event in events %}
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 rounded-3 mb-4">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">{{ event.title }}</h5>
+                    <p class="card-text text-muted">
+                        {{ event.overview|truncatewords:20 }}
+                    </p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            <i class="bi bi-calendar-event"></i>
+                            {{ event.start_date|date:"M d, Y" }} → {{ event.end_date|date:"M d, Y" }}
+                        </small>
+                    </p>
+                    <a href="{% url 'events:event-detail' event.id %}" class="btn btn-primary btn-sm">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p class="text-muted">No approved events yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <hr class="my-5">
+
+    <!-- Request Event Form (show only for logged-in users) -->
+    {% if user.is_authenticated %}
+    <h3 class="mb-3 text-center">📝 Request a New Event</h3>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.title.label_tag }}
+                            {{ form.title }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.overview.label_tag }}
+                            {{ form.overview }}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.start_date.label_tag }}
+                                {{ form.start_date }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.end_date.label_tag }}
+                                {{ form.end_date }}
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Send Request 🚀</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
