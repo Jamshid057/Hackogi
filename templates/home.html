@@ -1,49 +1,106 @@
-{% extends 'base.html' %}
-{% block title %} Home Page {% endblock title %}
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
 
 {% block content %}
 
 <style>
-    /* Card hover effect */
-    .hackathon-card {
-        transition: all 0.3s ease-in-out;
-        cursor: pointer;
-    }
-    .hackathon-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
-    }
+/* Hero Section */
+.hero-section {
+    position: relative;
+    height: 60vh; /* Balandlikni kerakli darajada o'zgartiring */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    margin-bottom: 50px;
+    width: 100%; /* Kenglikni to'liq 100% ga belgilash */
+    overflow: hidden; /* Kenglikni oshirgan rasmni yashirish */
+}
 
-    /* Title hover effect */
-    .hackathon-card .card-title {
-        transition: color 0.2s ease-in-out;
-    }
-    .hackathon-card:hover .card-title {
-        color: #0d6efd; /* Bootstrap primary */
-    }
+.hero-section .banner-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;  /* Kenglikni to'liq ekran o'lchamiga moslashtirish */
+    height: 100%;  /* Balandlikni to'liq ekranni egallash */
+    background-image: url('https://www.hypeinnovation.com/hubfs/Optimization/Hackathons/hackathon-group-laptops.jpg');
+    background-position: center center; /* Rasmni markazga joylashtirish */
+    background-size: cover; /* Rasmni to'liq egallash */
+    background-repeat: no-repeat;
+    z-index: 1;
+}
 
-    /* Truncate overview text */
-    .hackathon-card .card-text {
-        display: -webkit-box;
-        -webkit-line-clamp: 3;  /* faqat 3 qator chiqaradi */
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        min-height: 4.5em;
+/* Overlay to make text more visible */
+.hero-section::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* qora yarim shaffof overlay */
+    z-index: 2;
+}
+
+.hero-section .content {
+    position: relative;
+    z-index: 3;
+    max-width: 800px;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+}
+
+.hero-section p {
+    font-size: 1.2rem;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+}
+
+@media (max-width: 600px) {
+    .hero-section h1 {
+        font-size: 2rem;
     }
+    .hero-section p {
+        font-size: 1rem;
+    }
+}
+
+/* Card hover effect */
+.hackathon-card {
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+.hackathon-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.hackathon-card .card-title {
+    transition: color 0.2s ease-in-out;
+}
+
+.hackathon-card:hover .card-title {
+    color: #0d6efd; /* Bootstrap primary */
+}
 </style>
 
-<div class="p-4 p-md-5 mt-4 mb-4 rounded text-white bg-dark">
-    <div class="col-lg-8 px-0">
-        <h1 class="display-4 fw-bold"> Welcome to Hackogi</h1>
-        <p class="lead my-3">Explore exciting hackathons – join active ones, prepare for upcoming events, or look back at past challenges.</p>
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="banner-image"></div>
+    <div class="content">
+        <h1>Welcome to Hackogi</h1>
+        <p>Explore exciting hackathons – join active ones, prepare for upcoming events, or look back at past challenges.</p>
     </div>
 </div>
 
 <div class="container">
 
     <!-- Active Hackathons -->
-    <h2 class="mt-4 mb-3 border-bottom pb-2"> Active Hackathons</h2>
+    <h2 class="mt-4 mb-3 border-bottom pb-2">Active Hackathons</h2>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
         {% for hackathon in active_hackathons %}
         <div class="col">
@@ -52,7 +109,6 @@
                      class="card-img-top rounded-top" height="200" alt="{{ hackathon.title }}">
                 <div class="card-body position-relative">
                     <h5 class="card-title fw-bold text-dark">{{ hackathon.title }}</h5>
-                    <p class="card-text text-muted small">{{ hackathon.overview }}</p>
                     <a href="{% url 'events:event-detail' hackathon.id %}" class="stretched-link"></a>
                 </div>
             </div>
@@ -63,7 +119,7 @@
     </div>
 
     <!-- Upcoming Hackathons -->
-    <h2 class="mt-5 mb-3 border-bottom pb-2"> Upcoming Hackathons</h2>
+    <h2 class="mt-5 mb-3 border-bottom pb-2">Upcoming Hackathons</h2>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
         {% for hackathon in upcoming_hackathons %}
         <div class="col">
@@ -72,7 +128,6 @@
                      class="card-img-top rounded-top" height="200" alt="{{ hackathon.title }}">
                 <div class="card-body position-relative">
                     <h5 class="card-title fw-bold text-dark">{{ hackathon.title }}</h5>
-                    <p class="card-text text-muted small">{{ hackathon.overview }}</p>
                     <a href="{% url 'events:event-detail' hackathon.id %}" class="stretched-link"></a>
                 </div>
             </div>
@@ -83,7 +138,7 @@
     </div>
 
     <!-- Past Hackathons -->
-    <h2 class="mt-5 mb-3 border-bottom pb-2"> Past Hackathons</h2>
+    <h2 class="mt-5 mb-3 border-bottom pb-2">Past Hackathons</h2>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
         {% for hackathon in past_hackathons %}
         <div class="col">
@@ -92,7 +147,6 @@
                      class="card-img-top rounded-top" height="200" alt="{{ hackathon.title }}">
                 <div class="card-body position-relative">
                     <h5 class="card-title fw-bold text-dark">{{ hackathon.title }}</h5>
-                    <p class="card-text text-muted small">{{ hackathon.overview }}</p>
                     <a href="{% url 'events:event-detail' hackathon.id %}" class="stretched-link"></a>
                 </div>
             </div>
@@ -103,6 +157,5 @@
     </div>
 
 </div>
-
 {% endblock %}
 
